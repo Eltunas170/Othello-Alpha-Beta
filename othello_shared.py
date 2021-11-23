@@ -1,11 +1,3 @@
-"""
-This module contains functions that are accessed by the game manager
-and by the each AI player. Feel free to call these functions when 
-building your AIs. 
-
-@author: Daniel Bauer 
-"""
-
 def find_lines(board, i, j, player):
     """
     Find all the uninterupted lines of stones that would be captured if player
@@ -66,7 +58,7 @@ def play_move(board, player, i, j):
     return tuple(final)
 
 
-
+#Score
 def get_score(board):
     p1_count = 0
     p2_count = 0

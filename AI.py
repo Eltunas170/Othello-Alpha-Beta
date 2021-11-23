@@ -1,13 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*
-
-"""
-An AI player for Othello. This is the template file that you need to  
-complete and submit for the competition. 
-
-@author: YOUR NAME
-"""
-
 import random
 import sys
 import time
@@ -18,6 +8,8 @@ from othello_shared import find_lines, get_possible_moves, get_score, play_move
 def compute_utility(board, color):
     return 0
 
+######################## EVALUATION ########################
+
 def check_space(board, player, i, j):
     new_board = play_move(board, player, i, j)
     if new_board == board: #the piece is already there
@@ -25,33 +17,8 @@ def check_space(board, player, i, j):
     else:
         return False#the piece is not there
 
-############ MINIMAX ###############################
-
-def minimax_min_node(board, color, depth, alpha, beta, start_time):
-    new_board = board
-    cur_min = math.inf
-    moves = get_possible_moves(board, color)
-    end = time.time()
-    if len(moves) == 0 or depth == 0 or end - start_time> 4.9:
-        return (-1,-1), evaluate_board(board, color)
-    else: 
-        for i in moves:
-            new_board = play_move(board, color, i[0], i[1])
-            if color == 1:
-                next_player = 2
-            else:
-                next_player = 1
-            new_move, new_score = minimax_max_node(new_board, next_player, depth - 1, alpha, beta, start_time)
-            if new_score < cur_min:
-                cur_min = new_score
-                best_move = i
-            beta = min(new_score, beta) 
-            if beta <= alpha:
-                break
-        return best_move, cur_min 
-
 def evaluate_board(board, color):
-
+    
     cur_score=get_score(board)
     if color == 1:
         score = cur_score[0] - cur_score[1] #switch depending on who goes first 1,0 is when AI goes second 
@@ -103,13 +70,11 @@ def evaluate_board(board, color):
             score-=25
             
         #the edges
-        
         if check_space(board, 1, 3, 0):
             score +=25
         if check_space(board, 1, 4, 0):
             score +=25
-        
-        
+
         if check_space(board, 1, 0, 3):
             score +=25
         if check_space(board, 1, 0, 4):
@@ -282,6 +247,31 @@ def evaluate_board(board, color):
 
     return score
 
+######################### MINIMAX #########################
+
+def minimax_min_node(board, color, depth, alpha, beta, start_time):
+    new_board = board
+    cur_min = math.inf
+    moves = get_possible_moves(board, color)
+    end = time.time()
+    if len(moves) == 0 or depth == 0 or end - start_time> 4.9:
+        return (-1,-1), evaluate_board(board, color)
+    else: 
+        for i in moves:
+            new_board = play_move(board, color, i[0], i[1])
+            if color == 1:
+                next_player = 2
+            else:
+                next_player = 1
+            new_move, new_score = minimax_max_node(new_board, next_player, depth - 1, alpha, beta, start_time)
+            if new_score < cur_min:
+                cur_min = new_score
+                best_move = i
+            beta = min(new_score, beta) 
+            if beta <= alpha:
+                break
+        return best_move, cur_min 
+
 def minimax_max_node(board, color, depth, alpha, beta, start_time):
     end = time.time()
     cur_max = -math.inf
@@ -305,7 +295,7 @@ def minimax_max_node(board, color, depth, alpha, beta, start_time):
                 break
         return best_move, cur_max
 
-    
+
 def select_move_minimax(board, color):
     """
     Given a board and a player color, decide on a move. 
@@ -318,34 +308,10 @@ def select_move_minimax(board, color):
 
     return i,j, score
 
-"""
-############ ALPHA-BETA PRUNING #####################
+######################### START #########################
 
-#alphabeta_min_node(board, color, alpha, beta, level, limit)
-def alphabeta_min_node(board, color, alpha, beta): 
-    return None
-
-
-#alphabeta_max_node(board, color, alpha, beta, level, limit)
-def alphabeta_max_node(board, color, alpha, beta):
-    return None
-
-
-def select_move_alphabeta(board, color): 
-    return 0,0 
-
-
-####################################################
-"""
 def run_ai():
-    """
-    This function establishes communication with the game manager. 
-    It first introduces itself and receives its color. 
-    Then it repeatedly receives the current score and current board state
-    until the game is over. 
-    """
-
-    print("Artificial Stupidity") # First line is the name of this AI  
+    print("Ganame prro") # First line is the name of this AI  
     color = int(input()) # Then we read the color: 1 for dark (goes first), 
                          # 2 for light. 
 
@@ -367,12 +333,8 @@ def run_ai():
                                   # 0 : empty square
                                   # 1 : dark disk (player 1)
                                   # 2 : light disk (player 2)
-                    
-            # Select the move and send it to the manager 
             movei, movej, score = select_move_minimax(board, color)
-            #movei, movej = select_move_alphabeta(board, color)
             print("{} {}".format(movei, movej))
-
 
 if __name__ == "__main__":
     run_ai()

@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-This module contains the main Othello game which maintains the board, score, and 
-players.  
-
-@author: Daniel Bauer 
-"""
 import sys
 import subprocess
 from threading import Timer
